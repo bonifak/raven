@@ -38,11 +38,7 @@ try:
 except ImportError:
     import StringIO as io
     ioStringIO = io.StringIO
-try:
-    import dill as pickle
-except ImportError:
-    try: import cPickle as pickle
-    except ImportError: import pickle
+import cloudpickle as pickle
 import six
 import pptransport
 import ppcommon as ppc
