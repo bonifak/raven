@@ -222,7 +222,7 @@ class Dymola(CodeInterfaceBase):
     varDict = Kwargs['SampledVars']
 
     vectorsToPass= {}
-    for key, value in varDict.items():
+    for key, value in list(varDict.items()):
       if isinstance(value, bool):
         varDict[key] = 1 if value else 0
       if isinstance(value, numpy.ndarray):
@@ -251,9 +251,9 @@ class Dymola(CodeInterfaceBase):
 
     # Do the search and replace in input file "DymolaInitialisation"
     # Aliases for some regular sub-expressions.
-    u = '\d+' # Unsigned integer
+    u = '\\d+' # Unsigned integer
     i = '[+-]?' + u # Integer
-    f = i + '(?:\.' + u + ')?(?:[Ee][+-]' + u + ')?' # Floating point number
+    f = i + '(?:\\.' + u + ')?(?:[Ee][+-]' + u + ')?' # Floating point number
 
     # Possible regular expressions for a parameter specification (with '%s' for
     #   the parameter name)
