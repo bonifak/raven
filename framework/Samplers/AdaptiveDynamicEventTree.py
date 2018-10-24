@@ -33,6 +33,7 @@ from operator import mul
 from functools import reduce
 import xml.etree.ElementTree as ET
 from sklearn import neighbors
+import itertools
 #External Modules End--------------------------------------------------------------------------------
 
 #Internal Modules------------------------------------------------------------------------------------
@@ -122,7 +123,7 @@ class AdaptiveDynamicEventTree(DynamicEventTree, LimitSurfaceSearch):
       @ Out, needDict, dict, dictionary listing needed objects
     """
     #adaptNeedInst = self.limitSurfaceInstances.values()[-1]._localWhatDoINeed()
-    needDict = dict(LimitSurfaceSearch._localWhatDoINeed(self).items()+ DynamicEventTree._localWhatDoINeed(self).items())
+    needDict = dict(itertools.chain(LimitSurfaceSearch._localWhatDoINeed(self).items(),DynamicEventTree._localWhatDoINeed(self).items()))
     return needDict
 
   def _checkIfStartAdaptive(self):
@@ -375,6 +376,7 @@ class AdaptiveDynamicEventTree(DynamicEventTree, LimitSurfaceSearch):
     if self.startAdaptive:
       #if self._endJobRunnable != 1: self._endJobRunnable = 1
       data = self.lastOutput.asDataset()
+      print(self.lastOutput, data)
       endingData = data.where(data['RAVEN_isEnding']==True,drop=True)
       numCompletedHistories = len(endingData['RAVEN_isEnding'])
       if numCompletedHistories > self.completedHistCnt:
