@@ -448,7 +448,7 @@ class Dymola(CodeInterfaceBase):
       destFileName += '.csv' # Add the file extension .csv
 
       # Write the CSV file.
-      with open(destFileName,"wb") as csvFile:
+      with open(destFileName,"w") as csvFile:
         resultsWriter = csv.writer(csvFile, lineterminator=str(u'\n'), delimiter=str(u','), quotechar=str(u'"'))
         resultsWriter.writerows(varNames)
         resultsWriter.writerows(varTrajectories)
