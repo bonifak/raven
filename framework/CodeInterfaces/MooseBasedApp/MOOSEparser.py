@@ -23,7 +23,7 @@ warnings.simplefilter('default',DeprecationWarning)
 import xml.etree.ElementTree as ET
 import os
 import copy
-from utils.utils import toBytes, toStrish, compare
+from utils.utils import toBytes, toStrish, compare, toString
 
 class MOOSEparser():
   """
@@ -102,7 +102,7 @@ class MOOSEparser():
         for string in child.tail:
           IOfile.write('  '+string+'\n')
       for key in child.attrib.keys():
-        IOfile.write('  '+key+' = '+toStrish(child.attrib[key])+'\n')
+        IOfile.write('  '+toString(key)+' = '+toString(child.attrib[key])+'\n')
       for childChild in child:
         printSubLevels(childChild,IOfile,1)
         for childChildChild in childChild:
