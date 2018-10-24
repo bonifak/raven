@@ -102,7 +102,7 @@ class MOOSEparser():
         for string in child.tail:
           IOfile.write('  '+string+'\n')
       for key in child.attrib.keys():
-        IOfile.write('  '+toString(key)+' = '+toString(child.attrib[key])+'\n')
+        IOfile.write('  '+toString(key)+' = '+toString(toStrish(child.attrib[key]))+'\n')
       for childChild in child:
         printSubLevels(childChild,IOfile,1)
         for childChildChild in childChild:
