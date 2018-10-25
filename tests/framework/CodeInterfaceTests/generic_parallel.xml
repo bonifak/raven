@@ -28,7 +28,7 @@
   <Models>
     <Code name="poly" subType="GenericCode">
       <executable>GenericInterface/poly_inp.py</executable>
-      <clargs arg="python3" type="prepend"/>
+      <clargs arg="python" type="prepend"/>
       <clargs arg="-i" extension=".xml" type="input"/>
       <clargs arg="-a" extension=".two" type="input"/>
       <clargs arg="-o" type="output"/>

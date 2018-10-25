@@ -17,7 +17,7 @@ Created on April 14, 2016
 @modified: picoco (The Ohio State University)
 '''
 
-from __future__ import division, print_function, unicode_literals, absolute_import
+from __future__ import division, print_function, absolute_import
 import warnings
 warnings.simplefilter('default',DeprecationWarning)
 
