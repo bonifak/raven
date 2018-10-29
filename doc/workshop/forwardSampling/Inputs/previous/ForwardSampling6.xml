@@ -59,12 +59,12 @@
     </ExternalModel>
     <PostProcessor name="Stat" subType="BasicStatistics">
       <expectedValue prefix="mean">X2,Y1</expectedValue>
-      <sensitivity prefix="sen">
+      <sensitivity prefix="sen_two">
         <targets>X1,X2</targets>
         <features>Y1,Y2</features>
       </sensitivity>
       <expectedValue prefix="mean">X1,X2,Y1,Y2</expectedValue>
-      <sensitivity prefix="sen">
+      <sensitivity prefix="sen_four">
         <targets>X1,X2,Y1,Y2</targets>
         <features>X1,X2,Y1,Y2</features>
       </sensitivity>
@@ -121,22 +121,26 @@
                  mean_Y1,
                  mean_X1,
                  mean_Y2,
-                 sen_X1_X1,
-                 sen_X1_X2,
-                 sen_X1_Y1,
-                 sen_X1_Y2,
-                 sen_X2_X1,
-                 sen_X2_X2,
-                 sen_X2_Y1,
-                 sen_X2_Y2,
-                 sen_Y1_X1,
-                 sen_Y1_X2,
-                 sen_Y1_Y1,
-                 sen_Y1_Y2,
-                 sen_Y2_X1,
-                 sen_Y2_X2,
-                 sen_Y2_Y1,
-                 sen_Y2_Y2</Group>
+                 sen_two_X1_Y1,
+                 sen_two_X1_Y2,
+                 sen_two_X2_Y1,
+                 sen_two_X2_Y2,
+                 sen_four_X1_X1,
+                 sen_four_X1_X2,
+                 sen_four_X1_Y1,
+                 sen_four_X1_Y2,
+                 sen_four_X2_X1,
+                 sen_four_X2_X2,
+                 sen_four_X2_Y1,
+                 sen_four_X2_Y2,
+                 sen_four_Y1_X1,
+                 sen_four_Y1_X2,
+                 sen_four_Y1_Y1,
+                 sen_four_Y1_Y2,
+                 sen_four_Y2_X1,
+                 sen_four_Y2_X2,
+                 sen_four_Y2_Y1,
+                 sen_four_Y2_Y2</Group>
   </VariableGroups>
 
 </Simulation>
