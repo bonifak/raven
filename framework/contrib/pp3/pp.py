@@ -42,6 +42,7 @@ try:
     import user
 except ImportError:
     user = types  # using as a stub
+#RAVEN CHANGE: switching to cloudpickle
 import cloudpickle as pickle
 def importable(func): # the original code
     #get lines of the source and adjust indent
@@ -401,6 +402,7 @@ class Server(object):
         self.logger.info("pp local server started with %d workers"
                 % (self.__ncpus, ))
 
+    #RAVEN CHANGE: adding functionToSkip
     def submit(self, func, args=(), depfuncs=(), modules=(),
                callback=None, callbackargs=(), group='default', globals=None, functionToSkip = None):
         """Submits function to the execution queue
@@ -480,6 +482,7 @@ class Server(object):
                    in ['builtins', '__builtin__', None]: pass
                 # do not include source for imported modules
                 elif ppc.is_not_imported(arg, modules):
+                    #RAVEN CHANGE: adding functionToSkip removing.
                     clshier = ppc.get_class_hierarchy(arg.__class__)
                     if functionToSkip != None:
                       tempclshier = []

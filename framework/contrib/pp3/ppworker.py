@@ -38,6 +38,7 @@ try:
 except ImportError:
     import StringIO as io
     ioStringIO = io.StringIO
+#RAVEN CHANGE: switching to cloudpickle
 import cloudpickle as pickle
 import six
 import pptransport
