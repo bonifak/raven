@@ -376,7 +376,6 @@ class AdaptiveDynamicEventTree(DynamicEventTree, LimitSurfaceSearch):
     if self.startAdaptive:
       #if self._endJobRunnable != 1: self._endJobRunnable = 1
       data = self.lastOutput.asDataset()
-      print(self.lastOutput, data)
       endingData = data.where(data['RAVEN_isEnding']==True,drop=True)
       numCompletedHistories = len(endingData['RAVEN_isEnding'])
       if numCompletedHistories > self.completedHistCnt:

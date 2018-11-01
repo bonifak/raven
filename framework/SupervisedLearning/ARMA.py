@@ -19,7 +19,7 @@
   Specific ROM implementation for ARMA (Autoregressive Moving Average) ROM
 """
 #for future compatibility with Python 3--------------------------------------------------------------
-from __future__ import division, print_function, unicode_literals, absolute_import
+from __future__ import division, print_function, absolute_import
 import warnings
 warnings.simplefilter('default',DeprecationWarning)
 #End compatibility block for Python 3----------------------------------------------------------------
@@ -41,17 +41,6 @@ from utils import randomUtils
 import Distributions
 from .SupervisedLearning import supervisedLearning
 #Internal Modules End--------------------------------------------------------------------------------
-
-def _toStr(s):
-  """
-    Removes unicode from strings in Python 2 so amsc can use it.
-    @ In, s, unicode or str, String to convert to plain str
-    @ Out, s, str, Converted str
-  """
-  if sys.version_info.major > 2:
-    return s
-  return s.encode('ascii')
-
 
 
 class ARMA(supervisedLearning):
@@ -852,20 +841,20 @@ class ARMA(supervisedLearning):
     # train multivariate normal distributions using covariances, keep it around so we can control the RNG
     ## it appears "measurement" always has 0 covariance, and so is all zeros (see _generateVARMASignal)
     ## all the noise comes from the stateful properties
-    stateDist = self._trainMultivariateNormal(numVars,np.zeros(numVars),model.ssm[_toStr('state_cov')])
+    stateDist = self._trainMultivariateNormal(numVars,np.zeros(numVars),model.ssm['state_cov'])
     # train initial state sampler
     ## Used to pick an initial state for the VARMA by sampling from the multivariate normal noise
     #    and using the AR and MA initial conditions.  Implemented so we can control the RNG internally.
     #    Implementation taken directly from statsmodels.tsa.statespace.kalman_filter.KalmanFilter.simulate
     ## get mean
     smoother = model.ssm
-    mean = np.linalg.solve(np.eye(smoother.k_states) - smoother[_toStr('transition'),:,:,0],
-                           smoother[_toStr('state_intercept'),:,0])
+    mean = np.linalg.solve(np.eye(smoother.k_states) - smoother['transition',:,:,0],
+                           smoother['state_intercept',:,0])
     ## get covariance
-    r = smoother[_toStr('selection'),:,:,0]
-    q = smoother[_toStr('state_cov'),:,:,0]
+    r = smoother['selection',:,:,0]
+    q = smoother['state_cov',:,:,0]
     selCov = r.dot(q).dot(r.T)
-    cov = solve_discrete_lyapunov(smoother[_toStr('transition'),:,:,0], selCov)
+    cov = solve_discrete_lyapunov(smoother['transition',:,:,0], selCov)
     # FIXME it appears this is always resulting in a lowest-value initial state.  Why?
     initDist = self._trainMultivariateNormal(len(mean),mean,cov)
     # NOTE: uncomment this line to get a printed summary of a lot of information about the fitting.
