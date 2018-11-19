@@ -28,13 +28,20 @@
   <Models>
     <Code name="pythoncode" subType="GenericCode">
 	<executable>python_systemcode.py</executable>
-	<clargs extension=".i" type="input"/>
 	<clargs arg="python" type="prepend"/>
+	<clargs arg="" extension=".i" type="input"/>
+	<clargs arg=" " extension=".csv" type="output"/>
 	<outputFile>finalizedCodeOutput.csv</outputFile>
     </Code>
-
   </Models>
 
+  <DataObjects>
+    <PointSet name="pntset_vars">
+      <Input>diam</Input> <!-- this is one of the sampled params in Samplers -->
+      <Output>time_window</Output> <!-- these need to match the column headers in the parsed python output csv -->
+    </PointSet>
+  </DataObjects>
+  
   <Distributions>
     <Uniform name="dist_test">
       <lowerBound>5</lowerBound>
@@ -55,12 +62,7 @@
   </Samplers>
 
   
-  <DataObjects>
-    <PointSet name="pntset_vars">
-      <Input>diam</Input>
-      <Output>time_window</Output> <!-- these need to match the column headers in the parsed python output csv -->
-    </PointSet>
-  </DataObjects>
+  
 
   <OutStreams>
     <!-- Print to CSV -->
