@@ -1,0 +1,531 @@
+free format
+*
+**********************************************************************
+                                                         * MAIN DATA *
+**********************************************************************
+*       NUMTCR          IEOS         INOPT          NMAT          ID2O
+             1             0             1             0             0
+EPR SPENT FUEL POOL 
+********************************
+               * NAMELIST DATA *
+********************************
+ &inopts
+  graphlevel=full,
+  ielv=2,
+  ikfac=1,
+  isolvedef=1,
+  noair=1,
+  usesjc=2    
+ &end
+********************************
+          * GENERAL MODEL INFO *
+********************************
+*        DSTEP         TIMET
+             0           0.0
+*       STDYST        TRANSI         NCOMP          NJUN          IPAK
+             0             1            11             0             1
+*         EPSO          EPSS
+        1.0E-4        1.0E-4
+*       OITMAX        SITMAX        ISOLUT        NCONTR         NCCFL
+            10            10             0             0             0
+*         NTSV          NTCB          NTCF          NTRP          NTCP
+             1             0             0             0             0
+********************************
+           * COMPONENT NUMBERS *
+********************************
+* IORDER *
+   1 s               * BOUNDARY CONDITION *
+   500 s             * FUEL POOL *
+   101 102 103 104 s * TRAIN 1 *
+   105 106 107 108 s
+   109 e
+*
+**********************************************************************
+                                              * SIGNAL VARIABLE DATA *
+**********************************************************************
+*         ISDV          ISVN          ILCN          ICN1          ICN2
+           101             0             0             0             0
+*
+*
+**********************************************************************
+                                                    * COMPONENT DATA *
+**********************************************************************
+*
+********************************
+             * BC - ATMOSPHERE *
+********************************
+*
+*******   TYPE           NUM            ID        CTITLE
+break                      1             1    atmosphere
+*         JUN1          IBTY          ISAT          IOFF      ADJPRESS
+             1             0             0             1             0
+*         DXIN         VOLIN         ALPIN           TIN           PIN
+           1.0          77.0           0.0         293.0      101325.0
+*         PAIN        CONCIN          RBMX          POFF          BELV
+           0.0           0.0        1.0E20           0.0           1.0
+* 
+********************************
+                   * FUEL POOL *
+********************************
+*
+*******   TYPE           NUM            ID        CTITLE
+pipe                     500           500     fuel pool 
+*       NCELLS         NODES          JUN1          JUN2          EPSW
+            19             0             0             1       1.50E-4
+*       NSIDES
+             2
+*         NCLK         JUNLK        NCMPTO         CLKTO        NLEVTO 
+             1           101             0             0             0
+*         NCLK         JUNLK        NCMPTO         CLKTO        NLEVTO 
+             1           110             0             0             0
+*         ICHF         ICONC      PIPETYPE          IPOW        NPIPES
+             1             0             0             0             1
+*        RADIN            TH         HOUTL         HOUTV         TOUTL
+           0.0           0.0           0.0           0.0           0.0
+*        TOUTV  (words 2-5 are not used if ipow=0)
+           0.0
+* DX 
+        f 1.0 e
+* VOL 
+        f 77.0 e
+* FA 
+        f 77.0 e
+* FRIC 
+        f 0.0 e
+* DELEV
+        f 1.0 e
+* HD  
+        f 8.56 e
+* NFF 
+        f 1 e
+* ALP 
+        f 0.0 e
+* VL   
+        f 0.0 e
+* VV  
+        f 0.0 e
+* TL 
+        f 323.15 e
+* TV 
+        f 0.0 e
+* P  
+        f 101325.0 e
+* PA 
+        f 0.0 e
+* 
+********************************
+                     * TRAIN 1 *
+********************************
+*
+*******   TYPE           NUM            ID        CTITLE
+pipe                     101           101      pipe 101 
+*       NCELLS         NODES          JUN1          JUN2          EPSW
+            13             0           101           102       1.50E-4
+*       NSIDES
+             0
+*         ICHF         ICONC      PIPETYPE          IPOW        NPIPES
+             1             0             0             0             1
+*        RADIN            TH         HOUTL         HOUTV         TOUTL
+           0.0           0.0           0.0           0.0           0.0
+*        TOUTV  (words 2-5 are not used if ipow=0)
+           0.0
+* DX
+        f 1.0 e
+* VOL
+        f 3.1416E-2 e
+* FA
+        f 3.1416E-2 e
+* FRIC
+        f 0.0 e
+* DELEV
+        f 0.0 e
+* HD
+        f 0.2 e
+* NFF
+        f 1 e
+* ALP
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL
+        f 323.15 e
+* TV
+        f 0.0 e
+* P 
+        f 287000.0 e
+* PA
+        f 0.0 e
+* 
+*
+*******   TYPE           NUM           ID       CTITLE
+valve                    102          102    valve 102
+*       NCELLS         NODES         JUN1         JUN2         EPSW
+             0             0          102          103      1.50E-4
+*         ICHF         ICONC         IVTY         IVPS        NVTB2
+             1             0            0            1            0
+*         IVTR          IVSV        NVTB2         NVSV         NVRF
+             0             0            0            0            0
+*       IVTROV        IVTYOV
+             0             0
+*         RVMX          RVOV        FMINOV        FMAXOV
+           0.0           0.0           0.0           1.0
+*        RADIN            TH         HOUTL         HOUTV         TOUTL
+           0.0           0.0           0.0           0.0           0.0
+*        TOUTV         AVLVE         HVLVE        FAVLVE          XPOS
+           0.0     3.1416E-2           0.2           1.0           1.0
+* DX        
+        f 0.0 e
+* VOL  
+        f 0.0 e
+* FA   
+        f 3.1416E-2 e
+* FRIC         
+        f 0.0 e
+* DZ
+        f 0.0 e
+* HD       
+        f 0.2 e
+* NFF            
+        f 1 e 
+* ALP          
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL       
+        f 333.0 e 
+* TV
+        f 333.0 e 
+* P
+        f 101325.0 e
+* PA
+        f 0.0 e
+*
+*
+*******   TYPE           NUM            ID        CTITLE
+pipe                     103           103      pipe 103
+*       NCELLS         NODES          JUN1          JUN2          EPSW
+             2             0           103           104       1.50E-4
+*       NSIDES
+             0
+*         ICHF         ICONC      PIPETYPE          IPOW        NPIPES
+             1             0             0             0             1
+*        RADIN            TH         HOUTL         HOUTV         TOUTL
+           0.0           0.0           0.0           0.0           0.0
+*        TOUTV  (words 2-5 are not used if ipow=0)
+           0.0
+* DX
+        f 1.0 e
+* VOL
+        f 3.1416E-2 e
+* FA
+        f 3.1416E-2 e
+* FRIC
+        f 0.0 e
+* DELEV
+        f 0.0 e
+* HD
+        f 0.2 e
+* NFF
+        f 1 e
+* ALP
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL
+        f 323.15 e
+* TV
+        f 0.0 e
+* P 
+        f 287000.0 e
+* PA
+        f 0.0 e
+* 
+*
+*******   type           num       userid            component name
+valve                    104          104                       CV1
+*       ncells         nodes         jun1         jun2         epsw
+             0             0          104          105      1.50E-4
+*         ichf         iconc         ivty         ivps        nvtb2
+             1             0            0            1            0
+*         ivtr          ivsv        nvtb1         nvsv         nvrf
+             0             0            0            0            0
+*       ivtrov        ivtyov
+             0             0
+*         rvmx          rvov        fminov        fmaxov
+         100.0         100.0           0.0           1.0
+*        radin            th         houtl         houtv         toutl
+           0.0           0.0           0.0           0.0           0.0
+*        toutv         avlve         hvlve        favlve          xpos
+           0.0           1.0         1.128           1.0           1.0
+* DX        
+        f 0.0 e
+* VOL  
+        f 0.0 e
+* FA   
+        f 3.1416E-2 e
+* FRIC         
+        f 0.0 e
+* DZ
+        f 0.0 e
+* HD       
+        f 0.2 e
+* NFF            
+        f 1 e 
+* ALP          
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL       
+        f 333.0 e 
+* TV
+        f 333.0 e 
+* P
+        f 101325.0 e
+* PA
+        f 0.0 e
+*
+*
+*******   type           num        userid              component name
+pipe                     105           105                    PIPE 105
+*       ncells         nodes          jun1          jun2          epsw
+             2             0           105           106       1.50E-4
+*       nsides
+             0
+*         ichf         iconc      pipetype          ipow        npipes
+             1             0             0             0             1
+*        radin            th         houtl         houtv         toutl
+           0.0           0.0           0.0           0.0           0.0
+*        toutv          pwin         pwoff         rpwmx         pwscl
+           0.0           0.0           0.0           0.0           0.0
+* DX
+        f 1.0 e
+* VOL
+        f 3.1416E-2 e
+* FA
+        f 3.1416E-2 e
+* FRIC
+        f 0.0 e
+* DELEV
+        f 0.0 e
+* HD
+        f 0.2 e
+* NFF
+        f 1 e
+* ALP
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL
+        f 323.15 e
+* TV
+        f 0.0 e
+* P 
+        f 287000.0 e
+* PA
+        f 0.0 e
+* 
+*
+*******   TYPE           NUM            ID        CTITLE
+pump                     106           106      pump 106
+*       NCELLS         NODES          JUN1          JUN2          EPSW
+             0             0           106           107       1.50E-4
+*         ICHF         ICONC        IPMPTY           IRP           IPM
+             1             0             9             0             0
+*       ipmptr        pmpsvl        npmpvl        pmpsvv        npmpvv
+             0           101             1             0             0
+*        vllim         vvlim
+         100.0         100.0    
+* dx    *        
+              f 0.0 e
+* vol   *       
+              f 0.0 e
+* fa    *      
+              f 1.0 e
+* kfac  *     
+              f 0.0 e
+* dz    *
+              f 0.0 e
+* hd    *      
+              f 1.128 e
+* nff   *
+              f 1 e
+* alp   *
+              f 0.0 e
+* vl    * 
+              f 0.0 e
+* vv    *
+              f 0.0 e
+* tl    *        
+              f 333.0 e 
+* tv    *
+              f 333.0 e 
+* p     *
+              f 101325.0 e
+* pa    *
+              f 0.0 e
+* pmltb *
+              1.0    10.0 e
+*
+*
+*******   type           num        userid              component name
+pipe                     107           107                    PIPE 107
+*       ncells         nodes          jun1          jun2          epsw
+             4             0           107           108       1.50E-4
+*       nsides
+             0
+*         ichf         iconc      pipetype          ipow        npipes
+             1             0             0             0             1
+*        radin            th         houtl         houtv         toutl
+           0.0           0.0           0.0           0.0           0.0
+*        toutv          pwin         pwoff         rpwmx         pwscl
+           0.0           0.0           0.0           0.0           0.0
+* DX
+        f 1.0 e
+* VOL
+        f 3.1416E-2 e
+* FA
+        f 3.1416E-2 e
+* FRIC
+        f 0.0 e
+* DELEV
+        f 0.0 e
+* HD
+        f 0.2 e
+* NFF
+        f 1 e
+* ALP
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL
+        f 323.15 e
+* TV
+        f 0.0 e
+* P 
+        f 287000.0 e
+* PA
+        f 0.0 e
+* 
+*
+*******   type           num        userid              component name
+pipe                     108           108                      he 108
+*       ncells         nodes          jun1          jun2          epsw
+             1             3           108           109       1.50E-4
+*       nsides
+             0
+*         ichf         iconc      pipetype          ipow        npipes
+             1             0             0             0             1
+*       iqp3tr        iqp3sv        nqp3tb        nqp3sv        nqp3rf  
+             0             0             0             0             0
+*        radin            th         houtl         houtv         toutl
+         0.564           0.1          10.0           0.0         333.0
+*        toutv          pwin         pwoff         rpwmx         pwscl
+           0.0           0.0           0.0           0.0           0.0
+*        qp3in        qp3off        nqp3mx        qp3scl         nhcom  
+           0.0           0.0           0.0           0.0
+* DX
+        f 1.0 e
+* VOL
+        f 3.1416E-2 e
+* FA
+        f 3.1416E-2 e
+* FRIC
+        f 0.0 e
+* DELEV
+        f 0.0 e
+* HD
+        f 0.2 e
+* NFF
+        f 1 e
+* ALP
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL
+        f 323.15 e
+* TV
+        f 0.0 e
+* P 
+        f 287000.0 e
+* PA
+        f 0.0 e
+* qppp  *
+              f 0.0 e
+* matid *
+              f 6 e
+* tw    *
+              333.0 333.0 333.0 e
+* 
+*
+* 
+*
+*******   type           num        userid              component name
+pipe                     109           109                    PIPE 109
+*       ncells         nodes          jun1          jun2          epsw
+            13             0           109           110       1.50E-4
+*       nsides
+             0
+*         ichf         iconc      pipetype          ipow        npipes
+             1             0             0             0             1
+*        radin            th         houtl         houtv         toutl
+           0.0           0.0           0.0           0.0           0.0
+*        toutv          pwin         pwoff         rpwmx         pwscl
+           0.0           0.0           0.0           0.0           0.0
+* DX
+        f 1.0 e
+* VOL
+        f 3.1416E-2 e
+* FA
+        f 3.1416E-2 e
+* FRIC
+        f 0.0 e
+* DELEV
+        f 0.0 e
+* HD
+        f 0.2 e
+* NFF
+        f 1 e
+* ALP
+        f 0.0 e
+* VL
+        f 0.0 e
+* VV
+        f 0.0 e
+* TL
+        f 323.15 e
+* TV
+        f 0.0 e
+* P 
+        f 287000.0 e
+* PA
+        f 0.0 e
+* 
+*
+********* END OF TRAIN 1 *********
+*
+*
+end
+*****************
+* Timestep Data *
+*****************
+*        dtmin         dtmax          tend         rtwfp
+        1.0E-6          0.01   $RAVEN-var_tend$      1.0
+*        edint         gfint        dmpint        sedint
+          10.0           1.0         100.0           1.0
+*
+*      endflag
+          -1.0

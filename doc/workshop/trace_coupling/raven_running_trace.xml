@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<Simulation color="true" verbosity="debug">
+
+
+  <RunInfo>
+    <WorkingDir> workingDir                         </WorkingDir>
+    <Sequence>   step_generateData, step_outputData </Sequence>
+    <batchSize>  4                                  </batchSize>
+  </RunInfo>
+
+  <Steps>
+    <MultiRun  name="step_generateData">
+      <Sampler class="Samplers"      type="MonteCarlo"> sampler_mc           </Sampler>
+      <Input   class="Files"         type="">           file_origInput       </Input>
+      <Model   class="Models"        type="Code">       model_trace          </Model>
+      <Output  class="DataObjects"   type="HistorySet"> Temporal_Evolution   </Output>
+    </MultiRun>                                                              
+    <IOStep    name="step_outputData">                                       
+      <Input   class="DataObjects"   type="HistorySet"> Temporal_Evolution   </Input>
+      <Output  class="OutStreams"    type="Print">      print_temporalEv     </Output>
+      <Output  class="OutStreams"    type="Plot">       plot_poolTemp        </Output>
+	  <Output  class="OutStreams"    type="Plot">       plot_poolPress       </Output>
+    </IOStep>
+  </Steps>
+
+  <Files>
+    <Input     name="file_origInput" type="">        ../spent_fuel_pool.inp  </Input>
+  </Files>
+
+  <Models>
+    <Code      name="model_trace"    subType="Trace">
+	  <!-- BE SURE TO ASK ABOUT LINUX TRANSITION -->
+      <executable>C:\Users\Kendall\Desktop\trace\Executables\trace-V50p5-windows-msvs2017-ivf_O1-x64-Release.exe</executable> 
+	  <clargs extension=".inp" type="input"/>
+	  <alias variable="var_poolTemp"  type="output">    tln-500A01           </alias>
+	  <alias variable="var_poolPress" type="output">    pn-500A01            </alias>
+    </Code>
+  </Models>
+
+  <Distributions>
+  <!-- test for sampling the end time of the simulation -->
+    <Uniform name="dist_tend">
+      <lowerBound>5</lowerBound>
+      <upperBound>20</upperBound>
+    </Uniform>
+  </Distributions>  
+  
+  <Samplers>
+    <MonteCarlo name="sampler_mc">
+      <samplerInit>
+        <limit>5</limit>
+        <initialSeed>42</initialSeed>
+      </samplerInit>
+      <variable name="var_tend">
+        <distribution>dist_tend</distribution>
+      </variable>
+    </MonteCarlo>
+  </Samplers>
+
+  
+  <DataObjects>
+    <HistorySet name="Temporal_Evolution" hierarchical="true">
+      <Input>var_tend</Input>
+      <Output>var_poolTemp,var_poolPress</Output> <!-- these need to match the column headers in the parsed TRACE output csv -->
+      <options>
+          <pivotParameter>time</pivotParameter>
+      </options>
+    </HistorySet>
+  </DataObjects>
+
+  <OutStreams>
+    <!-- Print to CSV -->
+    <Print name="print_temporalEv">
+      <type>csv</type>
+      <source>Temporal_Evolution</source>
+    </Print>
+	<!-- Plot pool temperature -->
+    <Plot name="plot_poolTemp" overwrite="False">
+      <plotSettings>
+        <plot>
+          <type>  line                                  </type>
+          <x>     Temporal_Evolution|Output|time        </x>
+          <y>     Temporal_Evolution|Output|var_poolTemp</y>
+        </plot>
+        <xlabel>  Time[s]                               </xlabel>
+        <ylabel>  Temperature [K]                       </ylabel>
+      </plotSettings>
+      <actions>
+        <how>png</how>
+        <title><text>Evolution of Pool Temperature</text></title>
+      </actions>
+    </Plot>
+	<!-- Plot pool pressure -->
+    <Plot name="plot_poolPress" overwrite="False">
+      <plotSettings>
+        <plot>
+          <type>  line                                  </type>
+          <x>     Temporal_Evolution|Output|time        </x>
+          <y>     Temporal_Evolution|Output|var_poolPress</y>
+        </plot>
+        <xlabel>  Time[s]                               </xlabel>
+        <ylabel>  Pressure [Pa]                         </ylabel>
+      </plotSettings>
+      <actions>
+        <how>png</how>
+        <title><text>Evolution of Pool Pressure</text></title>
+      </actions>
+    </Plot>
+  </OutStreams>
+
+</Simulation>
