@@ -1,0 +1,138 @@
+<Simulation verbosity="debug" color="true">
+ 
+  <RunInfo>
+    <WorkingDir>.</WorkingDir>
+    <Sequence>step_outerSample,print</Sequence>
+	<batchSize>4                          </batchSize>
+  </RunInfo>
+
+  <Steps>
+    <MultiRun  name="step_outerSample">
+      <Input   class="Files"       type="raven">      file_inner</Input>
+      <Model   class="Models"      type="Code">       raven</Model>
+      <Sampler class="Samplers"    type="MonteCarlo"> outer_sampler_mc</Sampler>
+      <Output  class="DataObjects" type="PointSet">   outer_samples</Output>
+    </MultiRun>
+    <IOStep    name="print">
+      <Input   class="DataObjects" type="PointSet">   outer_samples</Input>
+      <Output  class="OutStreams"  type="Print">      outerSample_finalOutput</Output>
+	  <Output  class="OutStreams"  type="Plot">       to_plot         </Output>
+    </IOStep>
+  </Steps>
+
+  <Files>
+    <Input name="file_inner" type="raven">raven_input_inner.xml</Input>
+  </Files>
+
+  <Models>
+    <Code name="raven" subType="RAVEN">
+        <executable>../../../../raven_framework</executable>
+        <outputExportOutStreams>outputFile_inner</outputExportOutStreams> <!-- this is where each inner sample is stored -->
+		<alias variable="var_given_OAmean" type="input">
+          Samplers|Grid|constant@name:var_given_OAmean
+		</alias>
+		<alias variable="var_sampled_OAEF" type="input">
+          Samplers|Grid|constant@name:var_sampled_OAEF
+		</alias>
+		<alias variable="var_OAsigma" type="input">
+		  Distributions|LogNormal@name:dist_logNormal|sigma
+		</alias>
+		<alias variable="var_OAmu" type="input">
+		  Distributions|LogNormal@name:dist_logNormal|mean
+		</alias>
+		<alias variable="var_sampled_dischCoeff" type="input">
+          Samplers|Grid|constant@name:var_sampled_dischCoeff
+		</alias>
+		<alias variable="var_sampled_Pvalve" type="input">
+          Samplers|Grid|constant@name:var_sampled_Pvalve
+		</alias>
+    </Code>
+  </Models>
+  
+  <Functions>
+    <External name="function_OAsigma" file="./python_functions/function_OAsigma.py">
+	  <variable>var_sampled_OAEF</variable>
+	</External>
+	<External name="function_OAmu"    file="./python_functions/function_OAmu.py">
+	  <variable>var_given_OAmean</variable>
+	  <variable>var_OAsigma</variable>
+	</External>
+  </Functions>
+
+  <Distributions>
+    <Uniform name="dist_OAEF">
+      <lowerBound>1.8</lowerBound>
+      <upperBound>2.2</upperBound>
+    </Uniform>
+	<Uniform name="dist_dischCoeff">
+      <lowerBound>0.72</lowerBound>
+      <upperBound>0.98</upperBound>
+    </Uniform>
+	<!--<Uniform name="dist_Pvalve">
+      <lowerBound>0.0</lowerBound>
+      <upperBound>1.0</upperBound>
+    </Uniform>-->
+	<LogNormal name="dist_Pvalve">
+      <mean>  -9.47384 </mean> <!-- these were hand-calculated with 1.24e-4 and ef=5.0 -->
+      <sigma> 0.97838 </sigma> 
+      <low>   0.0      </low>
+    </LogNormal>
+  </Distributions>
+
+  <Samplers>
+    <MonteCarlo name="outer_sampler_mc">
+	  <samplerInit>
+        <limit>2</limit>
+        <!--<initialSeed>42</initialSeed>-->
+      </samplerInit>
+	  <!-- The operator action variables -->
+      <variable name="var_sampled_OAEF">
+        <distribution>dist_OAEF</distribution>
+      </variable>
+	  <variable name="var_OAsigma">
+	    <function>function_OAsigma</function>
+	  </variable>
+	  <constant name="var_given_OAmean">394.0</constant>
+	  <variable name="var_OAmu">
+	    <function>function_OAmu</function>
+	  </variable>
+	  <!-- The discharge coefficient -->
+	  <variable name="var_sampled_dischCoeff">
+        <distribution>dist_dischCoeff</distribution>
+      </variable>
+	  <!-- The valve failure probability -->
+	  <variable name="var_sampled_Pvalve">
+        <distribution>dist_Pvalve</distribution>
+      </variable>
+    </MonteCarlo>
+  </Samplers>
+
+  <OutStreams>
+    <Print name="outerSample_finalOutput">
+      <type>csv</type>
+      <source>outer_samples</source>
+    </Print>
+	
+	<Plot name="to_plot">
+      <plotSettings>
+        <plot>
+          <type>histogram</type>
+          <x>outer_samples|Input|var_sampled_Pvalve</x>
+        </plot>
+        <xlabel>v0</xlabel>
+      </plotSettings>
+      <actions>
+        <how>png</how>
+      </actions>
+    </Plot>
+  </OutStreams>
+
+  <DataObjects>
+    <PointSet name="outer_samples">
+	  <!--<Input>var_sampled_OAEF</Input>-->
+      <Input>var_given_OAmean,var_sampled_OAEF,var_OAsigma,var_OAmu,var_sampled_dischCoeff,var_sampled_Pvalve</Input>
+      <Output>var_OAtime,X2</Output>
+    </PointSet>
+  </DataObjects>
+
+</Simulation>

@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<Simulation color="true" verbosity="debug">
+  
+  <RunInfo>
+    <WorkingDir>.                          </WorkingDir>
+    <Sequence>  step_generateData,step_plot</Sequence>
+    <batchSize> 4                          </batchSize>
+  </RunInfo>
+
+  <Distributions>
+    <LogNormal name="dist_logNormal">
+      <mean>  5.887576 </mean> <!-- this is taken from the outer sampling -->
+      <sigma> 0.421366 </sigma> <!-- this is taken from the outer sampling -->
+      <low>   0.0      </low>
+    </LogNormal>
+  </Distributions>
+
+  <Samplers>
+    <Grid name="sampler_grid">
+      <variable name="var_OAtime">
+        <distribution>dist_logNormal</distribution>
+		<!-- 4 branches -->
+		<grid construction="custom" type="CDF">0.05 0.5 0.95 1.0</grid>
+		<!-- 5 branches -->
+		<!--<grid construction="custom" type="CDF">0.05 0.5 0.95 0.999 1.0</grid>-->
+		<!-- 7 branches -->
+		<!--<grid construction="custom" type="CDF">0.05 0.5 0.9 0.99 0.999 0.9999 1.0</grid>-->
+		<!-- 10 branches -->
+		<!--<grid construction="custom" type="CDF">0.05 0.5 0.9 0.99 0.999 0.9999 
+		0.99999 0.999999 0.9999999 1.0</grid>-->
+		<!-- 20 branches -->
+        <!--<grid construction="custom" type="CDF">0.05 0.5 0.9 0.99 0.999 0.9999 
+		0.99999 0.999999 0.9999999 0.99999999 0.999999999 0.9999999999 0.99999999999
+        0.999999999999 0.9999999999999 0.99999999999999 0.999999999999999
+		0.9999999999999999 0.99999999999999999 1.0</grid>-->
+      </variable>
+	  <constant name="X2">                    1.0</constant> <!-- this is just here as a placeholder -->
+	  <constant name="var_sampled_OAEF">      1.0</constant> <!-- this is taken from the outer sampling -->
+	  <constant name="var_given_OAmean">      1.0</constant> <!-- this is taken from the outer sampling -->
+	  <constant name="var_sampled_dischCoeff">1.0</constant> <!-- this is taken from the outer sampling -->
+	  <constant name="var_sampled_Pvalve">    1.0</constant> <!-- this is taken from the outer sampling -->
+    </Grid>
+  </Samplers>
+
+  <DataObjects>
+    <PointSet name="pntset_dummyIn">
+      <Input>var_OAtime,X2</Input>
+    </PointSet>
+    <PointSet name="pntset_inner_samples">
+      <Input>var_OAtime,X2</Input>
+      <Output>var_OAtime_new,X2_new</Output> <!-- if you use the dummy model, you don't need this line -->
+    </PointSet>
+  </DataObjects>
+
+  <Models>
+    <Dummy name='dummy_model' subType=''/>
+    <ExternalModel ModuleToLoad="external_model" name="PythonModule" subType="">
+      <variables>var_OAtime,X2,var_OAtime_new,X2_new</variables> <!-- inputs AND outputs -->
+    </ExternalModel>
+  </Models>
+
+  <OutStreams>
+    <Print name="outputFile_inner">
+      <type>csv</type>
+      <source>pntset_inner_samples</source>
+    </Print>
+  </OutStreams>
+
+  <Steps>
+    <MultiRun name="step_generateData">
+	  <Input   class="DataObjects" type="PointSet"       >pntset_dummyIn</Input>
+      <Sampler class="Samplers"    type="Grid"           >sampler_grid</Sampler>
+	  <Model   class="Models" type="ExternalModel">PythonModule</Model>
+      <!--<Model   class="Models"      type="Dummy"          >dummy_model</Model>-->
+      <Output  class="DataObjects" type="PointSet"       >pntset_inner_samples</Output>
+    </MultiRun>
+    <IOStep name="step_plot" pauseAtEnd="True">
+      <Input   class="DataObjects" type="PointSet"       >pntset_inner_samples</Input>
+      <Output  class="OutStreams"  type="Print"          >outputFile_inner</Output>
+      <!--<Output class="OutStreams"  type="Plot"    >myPlot</Output>-->
+    </IOStep>
+  </Steps>
+
+</Simulation>
